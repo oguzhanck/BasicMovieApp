@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.example.movie.R
@@ -40,13 +43,19 @@ class MovieDetailFragment : BaseFragment() {
             movieDetailViewModel.viewModelScope.launch(Dispatchers.IO) {
                 movieDetail?.let { safeMovie ->
                     movieDetailViewModel.insertOrDelete(safeMovie)
-
                 }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 movieDetailViewModel.uiState.collect { uiState ->
                     if (uiState.errorMessage.isNullOrEmpty().not())
                         showErrorToast(uiState.errorMessage!!)
 
-                    changeIcon(uiState.inserted)
+                    uiState.inserted?.let {
+                        changeIcon(uiState.inserted)
+                    }
                 }
             }
         }
