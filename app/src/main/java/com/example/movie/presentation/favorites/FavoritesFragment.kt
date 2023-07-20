@@ -47,6 +47,8 @@ class FavoritesFragment : BaseFragment() {
                             moveToDetail(binding.root, movie, R.id.action_favoritesFragment_to_detailFragment)
                         }
                         binding.favoritesRecyclerView.adapter = adapter
+                    } else {
+                        binding.favoritesRecyclerView.adapter = null
                     }
                 }
             }

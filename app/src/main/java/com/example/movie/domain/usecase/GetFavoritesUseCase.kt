@@ -14,9 +14,7 @@ class GetFavoritesUseCase @Inject constructor(
         favoritesRepository.getFavoritesMovies().collect {
             when (it) {
                 is Resource.Success -> {
-                    if (it.data.isEmpty().not()) {
-                        emit(MovieState.Success(it.data))
-                    }
+                    emit(MovieState.Success(it.data))
                 }
                 is Resource.Error -> emit(MovieState.Error(it.message))
 
